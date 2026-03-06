@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lyhorng Heng — Grab Mobility</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:    #00B14F;
+      --green-lt: #E6F9EE;
+      --green-md: #B3EACA;
+      --ink:      #1a2e22;
+      --ink-soft: #4a6358;
+      --bg:       #fafdf8;
+      --white:    #ffffff;
+      --radius:   18px;
+      --shadow:   0 4px 24px rgba(0,177,79,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 48px;
+      background: rgba(250,253,248,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--green-md);
+    }
+    .nav-logo img {
+      height: 36px;
+      width: auto;
+      display: block;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--green); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, var(--green-lt), transparent 70%);
+      z-index: 0;
+    }
+    .hero > * { position: relative; z-index: 1; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--white);
+      border: 1.5px solid var(--green-md);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 28px;
+      letter-spacing: 0.5px;
+    }
+    .hero-badge span { font-size: 1rem; }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--green);
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--ink-soft);
+      max-width: 540px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--green);
+      color: var(--white);
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      box-shadow: 0 6px 20px rgba(0,177,79,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(0,177,79,0.38);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+      opacity: 0.6;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    .scroll-hint svg { width: 18px; height: 18px; }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 100px 24px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--ink);
+      margin-bottom: 48px;
+      line-height: 1.2;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--white);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    /* Photo column */
+    .about-photo-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 100px;
+    }
+    .photo-ring {
+      position: relative;
+      width: 180px;
+      height: 180px;
+    }
+    .photo-ring::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: conic-gradient(var(--green) 0% 60%, var(--green-md) 60% 80%, var(--green-lt) 80% 100%);
+      z-index: 0;
+      animation: spin 8s linear infinite;
+    }
+    .photo-ring::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      background: var(--white);
+      z-index: 1;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    .photo-ring img {
+      position: relative;
+      z-index: 2;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+    .photo-name {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--ink);
+      text-align: center;
+    }
+    .photo-role {
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      text-align: center;
+      line-height: 1.5;
+    }
+    .photo-flag {
+      display: flex;
+      gap: 6px;
+      font-size: 1.1rem;
+    }
+
+    /* Right column */
+    .about-right {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .about-bio {
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      line-height: 1.85;
+    }
+    .about-bio p + p { margin-top: 16px; }
+    .about-bio strong { color: var(--ink); font-weight: 700; }
+
+    .about-card {
+      background: var(--green-lt);
+      border-radius: var(--radius);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .stat-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--green-md);
+    }
+    .stat-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .stat-icon {
+      width: 40px; height: 40px;
+      background: var(--white);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      box-shadow: var(--shadow);
+    }
+    .stat-label { font-size: 0.8rem; color: var(--ink-soft); font-weight: 600; }
+    .stat-value { font-size: 0.95rem; color: var(--ink); font-weight: 700; }
+
+    /* ── WORK ── */
+    #work { background: var(--bg); }
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .work-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 28px;
+      border: 1.5px solid transparent;
+      box-shadow: var(--shadow);
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .work-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--green);
+      border-radius: 4px 4px 0 0;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .work-card:hover {
+      border-color: var(--green-md);
+      transform: translateY(-3px);
+    }
+    .work-card:hover::before { opacity: 1; }
+
+    .work-card-flag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--green);
+      background: var(--green-lt);
+      border-radius: 100px;
+      padding: 4px 12px;
+      margin-bottom: 16px;
+    }
+    .work-card h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .work-card p {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      line-height: 1.7;
+    }
+    .work-metric {
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-lt);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    /* ── SKILLS ── */
+    #skills { background: var(--white); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .skill-block {
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .skill-block h4 {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--green);
+      margin-bottom: 14px;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag {
+      background: var(--white);
+      border: 1.5px solid var(--green-md);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--ink);
+      text-align: center;
+      padding: 100px 24px;
+    }
+    #contact .section-label { color: var(--green-md); }
+    #contact .section-title {
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+    #contact p {
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 40px;
+      font-size: 1rem;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .contact-btn:hover { transform: translateY(-2px); opacity: 0.85; }
+    .contact-btn-primary {
+      background: var(--green);
+      color: var(--white);
+    }
+    .contact-btn-secondary {
+      background: rgba(255,255,255,0.1);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      text-align: center;
+      padding: 24px;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.25);
+    }
+    footer span { color: var(--green); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      nav { padding: 14px 20px; }
+      .nav-links { gap: 18px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-photo-col { position: static; }
+      .work-grid,
+      .skills-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo"><img src="logo.svg" alt="LH logo" /></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span>🟢</span> Grab · Mobility Marketplace
+    </div>
+    <h1>Hi, I'm <em>Lyhorng</em>.<br>I make fares make sense.</h1>
+    <p class="hero-sub">
+      Pricing strategist for Cambodia &amp; Myanmar, turning data into decisions
+      and marketplace chaos into something that actually works.
+    </p>
+    <a href="#about" class="hero-cta">Get to know me</a>
+
+    <div class="scroll-hint">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
+      scroll
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <p class="section-label">About Me</p>
+      <h2 class="section-title">Part spreadsheet, part chaos.<br>All marketplace.</h2>
+
+      <div class="about-grid">
+
+        <!-- Photo column -->
+        <div class="about-photo-col">
+          <div class="photo-ring">
+            <img src="profile.png" alt="Lyhorng Heng" />
+          </div>
+          <div class="photo-name">Lyhorng Heng</div>
+          <div class="photo-role">Marketplace Associate · Mobility<br>Grab</div>
+          <div class="photo-flag">🇰🇭 🇲🇲</div>
+        </div>
+
+        <!-- Bio + Stats column -->
+        <div class="about-right">
+          <div class="about-bio">
+          <p>
+            Hi there! I'm <strong>Lyhorng</strong> — the person quietly (and sometimes not-so-quietly)
+            deciding whether your Grab ride costs a little more on a rainy Friday evening.
+            <em>Sorry. Also, you're welcome.</em>
+          </p>
+          <p>
+            As an <strong>Associate in Mobility Marketplace</strong> at Grab, I cover
+            <strong>Cambodia 🇰🇭 and Myanmar 🇲🇲</strong> — two frontier markets where
+            every pricing decision is basically a live experiment with real stakes.
+          </p>
+          <p>
+            My days involve interrogating dashboards at 9am, simulating fare cuts over lunch,
+            and convincing stakeholders that a 10% price drop is actually a great idea — with receipts.
+            Spoiler: <strong>session growth went up 9%.</strong> The data never lies (but it does
+            occasionally ghost you until 11pm).
+          </p>
+          <p>
+            Off-duty, I'm a professional overthinker (no, seriously — I will simulate 5 scenarios
+            before deciding what to eat for lunch). I also play badminton, 3 tournaments deep,
+            1 silver medal to show for it — which I'm convinced happened because my opponent
+            took one look at my game face and decided second place wasn't worth the trauma.
+            Some call it toxic. I call it <strong>competitive pricing strategy, applied to sports</strong>.
+          </p>
+        </div><!-- /about-bio -->
+
+        <div class="about-card">
+          <div class="stat-row">
+            <div class="stat-icon">🏢</div>
+            <div>
+              <div class="stat-label">Company</div>
+              <div class="stat-value">Grab</div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-icon">🗺️</div>
+            <div>
+              <div class="stat-label">Markets</div>
+              <div class="stat-value">Cambodia &amp; Myanmar</div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-icon">🏷️</div>
+            <div>
+              <div class="stat-label">Focus Area</div>
+              <div class="stat-value">Pricing &amp; Incentive Strategy</div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-icon">🎯</div>
+            <div>
+              <div class="stat-label">Vertical</div>
+              <div class="stat-value">Mobility (Transport)</div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-icon">🌱</div>
+            <div>
+              <div class="stat-label">Currently Exploring</div>
+              <div class="stat-value">Sustainability &amp; Urban Planning</div>
+            </div>
+          </div>
+        </div><!-- /about-card -->
+
+        </div><!-- /about-right -->
+      </div><!-- /about-grid -->
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="container">
+      <p class="section-label">Key Work</p>
+      <h2 class="section-title">Things I've shipped<br>(and the stories behind them).</h2>
+
+      <div class="work-grid">
+
+        <div class="work-card">
+          <div class="work-card-flag">🇰🇭 Cambodia</div>
+          <h3>EDLP — Right Pricing Initiative</h3>
+          <p>
+            Executed an Everyday Low Price fare cut of 10% for 3-wheelers in Phnom Penh.
+            Ran pre/post analysis to validate the decision and brought stakeholders along for the ride.
+          </p>
+          <div class="work-metric">📈 +9% session growth</div>
+        </div>
+
+        <div class="work-card">
+          <div class="work-card-flag">🇲🇲 Myanmar</div>
+          <h3>Streak Incentive — Yangon Launch</h3>
+          <p>
+            Led the rollout of the Streak driver incentive program in Yangon to replace the
+            weekly incentive scheme, improving driver engagement and reliability metrics.
+          </p>
+          <div class="work-metric">🔥 30% driver adoption</div>
+        </div>
+
+        <div class="work-card">
+          <div class="work-card-flag">🇲🇲 Myanmar</div>
+          <h3>DAX Pricing Experiment</h3>
+          <p>
+            Designed and ran a combined experiment widening allocation radius and tweaking
+            DAX (driver) pricing simultaneously to improve fulfillment rate.
+          </p>
+          <div class="work-metric">✅ +1.1pp fulfillment rate</div>
+        </div>
+
+        <div class="work-card">
+          <div class="work-card-flag">🇰🇭 Cambodia</div>
+          <h3>Streak Program — KH Rollout</h3>
+          <p>
+            Introduced and operationalised the Streak incentive in Cambodia, starting with
+            a manual AM peak-hour test before scaling to a full driver-facing rollout.
+          </p>
+          <div class="work-metric">⏰ Targeting peak reliability</div>
+        </div>
+
+        <div class="work-card">
+          <div class="work-card-flag">🇰🇭 Cambodia</div>
+          <h3>Multi-Vertical Pricing Launches</h3>
+          <p>
+            Configured and launched pricing for GrabPet, Standard Plus, EV, Advance Booking,
+            and Saver in Cambodia — plus pricing support for Kandal city split and the new airport
+            transition.
+          </p>
+          <div class="work-metric">🚀 5+ verticals launched</div>
+        </div>
+
+        <div class="work-card">
+          <div class="work-card-flag">🇰🇭 🇲🇲 Both Markets</div>
+          <h3>Festival Reliability Framework</h3>
+          <p>
+            Built a forecasting framework for demand, supply, and reliability during holidays.
+            Designed incentive schemes and post-event lookbacks for Water Festival and Year End.
+          </p>
+          <div class="work-metric">📊 Data-driven planning</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <p class="section-label">Skills</p>
+      <h2 class="section-title">What I bring<br>to the table.</h2>
+
+      <div class="skills-grid">
+        <div class="skill-block">
+          <h4>Pricing & Strategy</h4>
+          <div class="skill-tags">
+            <span class="tag">Fare Design</span>
+            <span class="tag">DAX Pricing</span>
+            <span class="tag">PAX Pricing</span>
+            <span class="tag">Surge Config</span>
+            <span class="tag">Take Rate Mgmt</span>
+            <span class="tag">EDLP</span>
+          </div>
+        </div>
+
+        <div class="skill-block">
+          <h4>Incentive Design</h4>
+          <div class="skill-tags">
+            <span class="tag">Streak Schemes</span>
+            <span class="tag">Driver Incentives</span>
+            <span class="tag">Peak-Hour Design</span>
+            <span class="tag">Bundle Schemes</span>
+            <span class="tag">Budget Simulation</span>
+          </div>
+        </div>
+
+        <div class="skill-block">
+          <h4>Analytics</h4>
+          <div class="skill-tags">
+            <span class="tag">Root Cause Analysis</span>
+            <span class="tag">Impact Simulation</span>
+            <span class="tag">SQL</span>
+            <span class="tag">Pre/Post Analysis</span>
+            <span class="tag">Demand Forecasting</span>
+          </div>
+        </div>
+
+        <div class="skill-block">
+          <h4>Marketplace Ops</h4>
+          <div class="skill-tags">
+            <span class="tag">Marketplace Health</span>
+            <span class="tag">Supply-Demand Mgmt</span>
+            <span class="tag">Reliability Mgmt</span>
+            <span class="tag">Pricing Config (Gamma)</span>
+          </div>
+        </div>
+
+        <div class="skill-block">
+          <h4>Soft Skills</h4>
+          <div class="skill-tags">
+            <span class="tag">Stakeholder Comms</span>
+            <span class="tag">Cross-functional Work</span>
+            <span class="tag">Fast Learner</span>
+            <span class="tag">Resilience</span>
+          </div>
+        </div>
+
+        <div class="skill-block">
+          <h4>Markets</h4>
+          <div class="skill-tags">
+            <span class="tag">Cambodia 🇰🇭</span>
+            <span class="tag">Myanmar 🇲🇲</span>
+            <span class="tag">Frontier Markets</span>
+            <span class="tag">Expansion Cities</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-label">Say Hello</p>
+      <h2 class="section-title">Let's connect.</h2>
+      <p>Whether it's pricing, marketplace strategy, or just a good chat —<br>my inbox is always open.</p>
+      <div class="contact-links">
+        <a href="mailto:lyhorng.heng@grabtaxi.com" class="contact-btn contact-btn-primary">
+          ✉️ Email Me
+        </a>
+        <a href="https://www.linkedin.com/in/lyhorng-heng" class="contact-btn contact-btn-secondary" target="_blank">
+          💼 LinkedIn
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Built with care &amp; too much data analysis. &copy; 2026 <span>Lyhorng Heng</span>.
+  </footer>
+
+</body>
+</html>

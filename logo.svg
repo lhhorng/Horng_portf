@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+
+  <!-- Subtle outer ring -->
+  <circle cx="50" cy="50" r="48" fill="#E6F9EE"/>
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#B3EACA" stroke-width="1"/>
+
+  <!-- Main solid circle -->
+  <circle cx="50" cy="50" r="40" fill="#00B14F"/>
+
+  <!-- Clean white LH monogram -->
+  <text
+    x="50" y="60"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="32"
+    font-style="italic"
+    font-weight="700"
+    letter-spacing="2"
+    fill="white">LH</text>
+
+</svg>
