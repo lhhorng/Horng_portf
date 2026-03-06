@@ -455,6 +455,84 @@
     }
     footer span { color: var(--green); }
 
+    /* ── ANIMATIONS ── */
+
+    /* Hero entrance */
+    .hero-badge  { opacity: 0; animation: fadeDown 0.6s ease forwards 0.1s; }
+    .hero h1     { opacity: 0; animation: fadeUp   0.7s ease forwards 0.3s; }
+    .hero-sub    { opacity: 0; animation: fadeUp   0.7s ease forwards 0.5s; }
+    .hero-cta    { opacity: 0; animation: fadeUp   0.7s ease forwards 0.65s; }
+    .scroll-hint { opacity: 0; animation: fadeUp   0.7s ease forwards 1s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scroll-reveal base state */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger delays for grid children */
+    .reveal-group > *        { opacity: 0; transform: translateY(28px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal-group.visible > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0s;    }
+    .reveal-group.visible > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.1s;  }
+    .reveal-group.visible > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.2s;  }
+    .reveal-group.visible > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.3s;  }
+    .reveal-group.visible > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.4s;  }
+    .reveal-group.visible > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 0.5s;  }
+
+    /* Nav active link */
+    .nav-links a.active { color: var(--green); }
+    .nav-links a::after {
+      content: '';
+      display: block;
+      height: 2px;
+      background: var(--green);
+      border-radius: 2px;
+      transform: scaleX(0);
+      transition: transform 0.25s ease;
+      transform-origin: left;
+    }
+    .nav-links a.active::after,
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* Work card hover glow */
+    .work-card:hover {
+      box-shadow: 0 8px 32px rgba(0,177,79,0.15);
+    }
+
+    /* Skill tag hover */
+    .tag {
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      cursor: default;
+    }
+    .tag:hover {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    /* Profile photo subtle float */
+    .photo-ring {
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 700px) {
       nav { padding: 14px 20px; }
@@ -502,10 +580,10 @@
   <!-- ABOUT -->
   <section id="about">
     <div class="container">
-      <p class="section-label">About Me</p>
-      <h2 class="section-title">Part spreadsheet, part chaos.<br>All marketplace.</h2>
+      <p class="section-label reveal">About Me</p>
+      <h2 class="section-title reveal">Part spreadsheet, part chaos.<br>All marketplace.</h2>
 
-      <div class="about-grid">
+      <div class="about-grid reveal">
 
         <!-- Photo column -->
         <div class="about-photo-col">
@@ -591,10 +669,10 @@
   <!-- WORK -->
   <section id="work">
     <div class="container">
-      <p class="section-label">Key Work</p>
-      <h2 class="section-title">Things I've shipped<br>(and the stories behind them).</h2>
+      <p class="section-label reveal">Key Work</p>
+      <h2 class="section-title reveal">Things I've shipped<br>(and the stories behind them).</h2>
 
-      <div class="work-grid">
+      <div class="work-grid reveal-group">
 
         <div class="work-card">
           <div class="work-card-flag">🇰🇭 Cambodia</div>
@@ -664,10 +742,10 @@
   <!-- SKILLS -->
   <section id="skills">
     <div class="container">
-      <p class="section-label">Skills</p>
-      <h2 class="section-title">What I bring<br>to the table.</h2>
+      <p class="section-label reveal">Skills</p>
+      <h2 class="section-title reveal">What I bring<br>to the table.</h2>
 
-      <div class="skills-grid">
+      <div class="skills-grid reveal-group">
         <div class="skill-block">
           <h4>Pricing & Strategy</h4>
           <div class="skill-tags">
@@ -738,10 +816,10 @@
   <!-- CONTACT -->
   <section id="contact">
     <div class="container">
-      <p class="section-label">Say Hello</p>
-      <h2 class="section-title">Let's connect.</h2>
-      <p>Whether it's pricing, marketplace strategy, or just a good chat —<br>my inbox is always open.</p>
-      <div class="contact-links">
+      <p class="section-label reveal">Say Hello</p>
+      <h2 class="section-title reveal">Let's connect.</h2>
+      <p class="reveal">Whether it's pricing, marketplace strategy, or just a good chat —<br>my inbox is always open.</p>
+      <div class="contact-links reveal">
         <a href="mailto:lyhorng.heng@grabtaxi.com" class="contact-btn contact-btn-primary">
           ✉️ Email Me
         </a>
@@ -755,6 +833,36 @@
   <footer>
     Built with care &amp; too much data analysis. &copy; 2026 <span>Lyhorng Heng</span>.
   </footer>
+
+  <script>
+    // ── Scroll reveal (Intersection Observer) ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal, .reveal-group').forEach(el => observer.observe(el));
+
+    // ── Active nav highlight on scroll ──
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+
+    sections.forEach(s => navObserver.observe(s));
+  </script>
 
 </body>
 </html>
