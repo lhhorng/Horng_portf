@@ -619,6 +619,98 @@
       .sim-wrapper { grid-template-columns: 1fr; }
     }
 
+    /* ── TRIP BREAKDOWN ── */
+    #trip { background: var(--white); }
+    .trip-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+    .trip-controls {
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* Receipt */
+    .receipt {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+      overflow: hidden;
+      font-size: 0.88rem;
+    }
+    .receipt-header {
+      background: var(--green);
+      padding: 24px 28px 20px;
+      color: white;
+    }
+    .receipt-logo { font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; opacity: 0.8; margin-bottom: 4px; }
+    .receipt-title { font-size: 1.2rem; font-weight: 800; }
+    .receipt-sub { font-size: 0.78rem; opacity: 0.75; margin-top: 2px; }
+
+    .receipt-rows { padding: 20px 28px; display: flex; flex-direction: column; gap: 12px; }
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--ink-soft);
+    }
+    .receipt-row span:last-child { font-weight: 700; color: var(--ink); white-space: nowrap; }
+    .receipt-surge {
+      background: var(--green-lt);
+      color: var(--green) !important;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 0.8rem;
+    }
+    .receipt-divider {
+      border: none;
+      border-top: 1.5px dashed var(--green-md);
+      margin: 4px 0;
+    }
+    .receipt-total {
+      font-size: 1.1rem;
+    }
+    .receipt-total span { color: var(--ink) !important; }
+    .receipt-total span:last-child { color: var(--green) !important; font-size: 1.2rem; }
+
+    .receipt-split {
+      background: var(--green-lt);
+      padding: 20px 28px;
+    }
+    .receipt-split-title { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--green); margin-bottom: 14px; }
+    .receipt-split-bars { display: flex; flex-direction: column; gap: 10px; }
+    .receipt-split-row { display: flex; align-items: center; gap: 10px; }
+    .split-label { width: 68px; font-size: 0.78rem; font-weight: 700; color: var(--ink-soft); flex-shrink: 0; }
+    .receipt-bar-track { flex: 1; height: 8px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden; }
+    .receipt-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+    .split-pct { font-size: 0.78rem; font-weight: 800; color: var(--ink); width: 72px; text-align: right; white-space: nowrap; }
+
+    .receipt-fun {
+      padding: 16px 28px;
+      font-size: 0.82rem;
+      font-style: italic;
+      color: var(--ink-soft);
+      border-top: 1px solid var(--green-lt);
+      border-left: 3px solid var(--green);
+      background: var(--white);
+      transition: all 0.3s ease;
+    }
+    .receipt-footer {
+      padding: 10px 28px 16px;
+      font-size: 0.7rem;
+      color: rgba(0,0,0,0.25);
+    }
+
+    @media (max-width: 700px) {
+      .trip-wrapper { grid-template-columns: 1fr; }
+    }
+
     /* ── ANIMATIONS ── */
 
     /* Hero entrance */
@@ -716,7 +808,8 @@
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#work">Work</a></li>
-      <li><a href="#simulator">Game</a></li>
+      <li><a href="#simulator">Game 1</a></li>
+      <li><a href="#trip">Game 2</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -987,6 +1080,118 @@
     </div>
   </section>
 
+  <!-- TRIP BREAKDOWN -->
+  <section id="trip">
+    <div class="container">
+      <p class="section-label reveal">Mini Game 2</p>
+      <h2 class="section-title reveal">Trip Fare Breakdown</h2>
+      <p class="sim-intro reveal">Ever wonder what happens to your money after you pay for a Grab? Here's a totally real and definitely accurate breakdown. (Numbers may be fake. Vibes are real.)</p>
+
+      <div class="trip-wrapper reveal">
+
+        <!-- Controls -->
+        <div class="trip-controls">
+
+          <div class="sim-slider-group">
+            <div class="sim-slider-label">
+              <span>📍 Distance</span>
+              <span class="sim-slider-val" id="distVal">5 km</span>
+            </div>
+            <input type="range" min="1" max="30" value="5" id="distSlider" class="sim-range" />
+            <div class="sim-slider-hint"><span>Around the corner</span><span>Cross-city journey</span></div>
+          </div>
+
+          <div class="sim-select-group">
+            <label>🛵 Vehicle Type</label>
+            <div class="sim-pills" id="vehiclePills">
+              <button class="sim-pill active" data-type="tuktuk">🛺 TukTuk</button>
+              <button class="sim-pill" data-type="car">🚗 GrabCar</button>
+              <button class="sim-pill" data-type="plus">✨ Standard Plus</button>
+            </div>
+          </div>
+
+          <div class="sim-select-group">
+            <label>⏰ Time</label>
+            <div class="sim-pills" id="tripTimePills">
+              <button class="sim-pill active" data-surge="1.0">🌙 Off-peak</button>
+              <button class="sim-pill" data-surge="1.3">🌅 Morning peak</button>
+              <button class="sim-pill" data-surge="1.6">🌆 Evening peak</button>
+            </div>
+          </div>
+
+          <div class="sim-select-group">
+            <label>🌦️ Weather</label>
+            <div class="sim-pills" id="tripWeatherPills">
+              <button class="sim-pill active" data-w="1.0">☀️ Sunny</button>
+              <button class="sim-pill" data-w="1.2">🌧️ Rainy</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Receipt -->
+        <div class="receipt">
+          <div class="receipt-header">
+            <div class="receipt-logo">🟢 Grab</div>
+            <div class="receipt-title">Trip Receipt</div>
+            <div class="receipt-sub" id="receiptSub">TukTuk · 5 km · Phnom Penh</div>
+          </div>
+
+          <div class="receipt-rows">
+            <div class="receipt-row">
+              <span>Base Fare</span>
+              <span id="rBase">2,000 ៛</span>
+            </div>
+            <div class="receipt-row">
+              <span>Distance (<span id="rDistLabel">5 km</span> × <span id="rRate">1,200 ៛</span>/km)</span>
+              <span id="rDistance">6,000 ៛</span>
+            </div>
+            <div class="receipt-row" id="surgeRow">
+              <span>Surge Multiplier</span>
+              <span id="rSurge" class="receipt-surge">1.0×</span>
+            </div>
+            <div class="receipt-row">
+              <span>Platform Fee</span>
+              <span id="rPlatform">500 ៛</span>
+            </div>
+            <div class="receipt-divider"></div>
+            <div class="receipt-row receipt-total">
+              <span>You Pay</span>
+              <span id="rTotal">8,500 ៛</span>
+            </div>
+          </div>
+
+          <div class="receipt-split">
+            <div class="receipt-split-title">Where does your money go?</div>
+            <div class="receipt-split-bars">
+              <div class="receipt-split-row">
+                <span class="split-label">🧑‍✈️ Driver</span>
+                <div class="receipt-bar-track">
+                  <div class="receipt-bar-fill" id="driverBar" style="width:78%;background:#00B14F"></div>
+                </div>
+                <span class="split-pct" id="driverAmt">—</span>
+              </div>
+              <div class="receipt-split-row">
+                <span class="split-label">🏢 Grab</span>
+                <div class="receipt-bar-track">
+                  <div class="receipt-bar-fill" id="grabBar" style="width:22%;background:#1a2e22"></div>
+                </div>
+                <span class="split-pct" id="grabAmt">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="receipt-fun" id="receiptFun">
+            "A solid fare. Driver's happy. Probably."
+          </div>
+
+          <div class="receipt-footer">* Disclaimer: numbers are fake but the math logic is real. Don't use this for your taxes.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- SKILLS -->
 
   <section id="skills">
@@ -1219,6 +1424,109 @@
     });
 
     updateSim();
+
+    // ── Trip Fare Breakdown Simulator ──
+    const vehicles = {
+      tuktuk: { name: 'TukTuk',        base: 2000,  rate: 1200, platformFee: 500,  takeRate: 0.20 },
+      car:    { name: 'GrabCar',       base: 3500,  rate: 2000, platformFee: 800,  takeRate: 0.22 },
+      plus:   { name: 'Standard Plus', base: 5000,  rate: 2800, platformFee: 1000, takeRate: 0.25 },
+    };
+
+    const tripFunLines = {
+      low:  [
+        '"A solid fare. Driver\'s happy. Probably."',
+        '"Short trip, clean numbers. I approve."',
+        '"This is what a healthy fare looks like. Screenshot this."',
+      ],
+      mid:  [
+        '"Not bad. Driver\'s making decent earnings."',
+        '"Moderate distance, moderate surge. Balance achieved."',
+        '"This is a reasonable trip. Lyhorng nods in approval."',
+      ],
+      high: [
+        '"Okay that\'s a long ride. Hope you brought snacks."',
+        '"Driver is about to have a great day. You... less so."',
+        '"At this fare, the driver might just take you home and adopt you."',
+      ],
+    };
+
+    let tripVehicle = 'tuktuk';
+    let tripSurge   = 1.0;
+    let tripWeather = 1.0;
+
+    function formatKHR(n) {
+      return Math.round(n).toLocaleString() + ' ៛';
+    }
+
+    function updateTrip() {
+      const dist = parseInt(document.getElementById('distSlider').value);
+      const v    = vehicles[tripVehicle];
+
+      document.getElementById('distVal').textContent = dist + ' km';
+
+      const distFare     = dist * v.rate;
+      const surgeApplied = tripSurge * tripWeather;
+      const subtotal     = (v.base + distFare) * surgeApplied;
+      const total        = subtotal + v.platformFee;
+      const grabCut      = total * v.takeRate;
+      const driverCut    = total - grabCut;
+      const driverPct    = Math.round((driverCut / total) * 100);
+      const grabPct      = 100 - driverPct;
+
+      document.getElementById('receiptSub').textContent  = v.name + ' · ' + dist + ' km · Phnom Penh';
+      document.getElementById('rBase').textContent       = formatKHR(v.base);
+      document.getElementById('rDistLabel').textContent  = dist + ' km';
+      document.getElementById('rRate').textContent       = v.rate.toLocaleString() + ' ៛';
+      document.getElementById('rDistance').textContent   = formatKHR(distFare);
+      document.getElementById('rSurge').textContent      = surgeApplied.toFixed(1) + '×';
+      document.getElementById('rPlatform').textContent   = formatKHR(v.platformFee);
+      document.getElementById('rTotal').textContent      = formatKHR(total);
+      document.getElementById('driverAmt').textContent   = formatKHR(driverCut);
+      document.getElementById('grabAmt').textContent     = formatKHR(grabCut);
+      document.getElementById('driverBar').style.width   = driverPct + '%';
+      document.getElementById('grabBar').style.width     = grabPct + '%';
+
+      const funEl = document.getElementById('receiptFun');
+      const level = dist < 5 ? 'low' : dist < 15 ? 'mid' : 'high';
+      const lines = tripFunLines[level];
+      funEl.textContent = lines[Math.floor(Math.random() * lines.length)];
+
+      const surgeEl = document.getElementById('rSurge');
+      if (surgeApplied <= 1.0)      { surgeEl.style.background = 'var(--green-lt)'; surgeEl.style.color = 'var(--green)'; }
+      else if (surgeApplied <= 1.5) { surgeEl.style.background = '#fff8ec';         surgeEl.style.color = '#d97706'; }
+      else                          { surgeEl.style.background = '#fef2f2';         surgeEl.style.color = '#dc2626'; }
+    }
+
+    document.getElementById('distSlider').addEventListener('input', updateTrip);
+
+    document.getElementById('vehiclePills').querySelectorAll('.sim-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('vehiclePills').querySelectorAll('.sim-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        tripVehicle = btn.dataset.type;
+        updateTrip();
+      });
+    });
+
+    document.getElementById('tripTimePills').querySelectorAll('.sim-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('tripTimePills').querySelectorAll('.sim-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        tripSurge = parseFloat(btn.dataset.surge);
+        updateTrip();
+      });
+    });
+
+    document.getElementById('tripWeatherPills').querySelectorAll('.sim-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('tripWeatherPills').querySelectorAll('.sim-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        tripWeather = parseFloat(btn.dataset.w);
+        updateTrip();
+      });
+    });
+
+    updateTrip();
   </script>
 
 </body>
